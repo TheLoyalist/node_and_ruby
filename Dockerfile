@@ -1,6 +1,6 @@
 FROM node:9.9.0-alpine
 
-# The rest of this Dockerfile was cut and pasted from: https://github.com/docker-library/ruby/blob/3904524e5d9e538b33525a602a4bcb7618aff8b6/2.5/alpine3.13/Dockerfile
+# The rest of this Dockerfile was cut and pasted from: https://github.com/docker-library/ruby/blob/3904524e5d9e538b33525a602a4bcb7618aff8b6/2.6/alpine3.13/Dockerfile
 RUN apk add --no-cache \
 		gmp-dev
 
@@ -13,10 +13,9 @@ RUN set -eux; \
 	} >> /usr/local/etc/gemrc
 
 ENV LANG C.UTF-8
-ENV RUBY_MAJOR 2.5
-ENV RUBY_VERSION 2.5.9
-ENV RUBY_DOWNLOAD_SHA256 a87f2fa901408cc77652c1a55ff976695bbe54830ff240e370039eca14b358f0
-ENV RUBYGEMS_VERSION 3.0.3
+ENV RUBY_MAJOR 2.6
+ENV RUBY_VERSION 2.6.7
+ENV RUBY_DOWNLOAD_SHA256 f43ead5626202d5432d2050eeab606e547f0554299cc1e5cf573d45670e59611
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
@@ -110,9 +109,6 @@ RUN set -eux; \
 	\
 	cd /; \
 	rm -r /usr/src/ruby; \
-# make sure bundled "rubygems" is older than RUBYGEMS_VERSION (https://github.com/docker-library/ruby/issues/246)
-	ruby -e 'exit(Gem::Version.create(ENV["RUBYGEMS_VERSION"]) > Gem::Version.create(Gem::VERSION))'; \
-	gem update --system "$RUBYGEMS_VERSION" && rm -r /root/.gem/; \
 # verify we have no "ruby" packages installed
 	! apk --no-network list --installed \
 		| grep -v '^[.]ruby-rundeps' \
